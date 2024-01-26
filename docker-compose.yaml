@@ -1,0 +1,34 @@
+version: "3.8"
+
+# define the services/containers to be run
+services:
+  # define the frontend service
+  # we can use any name for the service. A standard naming convention is to use "web" for the frontend
+  web:
+    # specify the build context for the web service
+    # this is the directory where the Dockerfile for the web service is located
+    build: .
+    # volumes:
+    #   - .:/app
+    # specify the ports to expose for the web service
+    # the first number is the port on the host machine
+    # the second number is the port inside the container
+    ports:
+      - 5200:3000
+    # specify the environment variables for the web service
+    # these environment variables will be available inside the container
+
+    # this is for docker compose watch mode
+    # anything mentioned under develop will be watched for changes by docker compose watch and it will perform the action mentioned
+    develop:
+      # we specify the files to watch for changes
+      watch:
+        # it'll watch for changes in package.json and package-lock.json and rebuild the container if there are any changes
+        - path: package.json
+          action: rebuild
+        - path: package-lock.json
+          action: rebuild
+        # it'll watch for changes in the frontend directory and sync the changes with the container real time
+        - path: .
+          target: /app
+          action: sync
